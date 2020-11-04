@@ -3,7 +3,7 @@ components:
   schemas:
     account:
       description: |-
-        Which is an object representing a Stripe account. You can retrieve it to see
+        How is an object representing a Stripe account. You can retrieve it to see
         properties on the account like its current e-mail address or if the account is
         enabled yet to make live charges.
 
