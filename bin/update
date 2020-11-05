@@ -59,7 +59,7 @@ class SystemUtils
   end
 
   def create_github_release(repo_org, repo_name, github_token, version)
-    uri = URI.parse('https://api.github.com/repos/ctrudeau-stripe/openapi/releases')
+    uri = URI.parse("https://api.github.com/repos/#{repo_org}/#{repo_name}/releases")
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -72,12 +72,15 @@ class SystemUtils
   end
 
   def get_latest_github_release(repo_org, repo_name, github_token)
-    data = JSON.parse(`curl \
-    -s \
-    -H "Accept: application/vnd.github.v3+json" \
-    -H "Authorization: token #{github_token}" \
-    https://api.github.com/repos/#{repo_org}/#{repo_name}/releases/latest`)
-    data["tag_name"]
+    uri = URI.parse("https://api.github.com/repos/#{repo_org}/#{repo_name}/releases/latest")
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request['Accept'] = "application/vnd.github.v3+json"
+    request['Authorization'] = "token #{github_token}"
+    response = http.request(request)
+    JSON.parse(response.body)["tag_name"]
   end
 
   def increment_version(version)
