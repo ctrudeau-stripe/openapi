@@ -84,10 +84,9 @@ class SystemUtils
   end
 
   def increment_version(version)
-    # 'BETA_1'
-    parts = version.split("_")
-    number = parts[1].to_i
-    "beta_#{number + 1}"
+    # 'v1'
+    version = version[0] = '' 
+    "v#{version + 1}"
   end
 
   def git_pull_origin_master
@@ -271,11 +270,11 @@ else
 
       utils.expect(:get_github_token, "TOKEN",[ENV["USER"]])
 
-      utils.expect(:get_latest_github_release, "beta_4",[Updater::REPO_ORG, Updater::REPO_NAME, "TOKEN"])
+      utils.expect(:get_latest_github_release, "v4",[Updater::REPO_ORG, Updater::REPO_NAME, "TOKEN"])
 
-      utils.expect(:increment_version, "beta_5",["beta_4"])
+      utils.expect(:increment_version, "v5",["v4"])
 
-      utils.expect(:create_github_release, "example.com",[Updater::REPO_ORG, Updater::REPO_NAME, "TOKEN", "beta_5"])
+      utils.expect(:create_github_release, "example.com",[Updater::REPO_ORG, Updater::REPO_NAME, "TOKEN", "v5"])
 
       updater.run
       utils.verify
